@@ -8,7 +8,7 @@ const userSchema = new Schema(
             type: String,
             required: true,
         },
-        lastname: {
+        lastName: {
             type: String,
             required: true,
         },
@@ -41,9 +41,14 @@ const userSchema = new Schema(
         address: {
             type: String,
         },
-        wishlist: {
-            type: Schema.type.ObjectId,
-            ref: "Product",
+        wishlist: [
+            {
+                type: Schema.type.ObjectId,
+                ref: "Product",
+            },
+        ],
+        refreshToken: {
+            type: String,
         },
         passwordChangedAt: Date,
         passwordResetToken: String,
@@ -85,8 +90,6 @@ userSchema.methods.generateRefreshToken = async function () {
     return jwt.sign(
         {
             _id: this._id,
-            firstName: this.firstName,
-            email: this.email,
         },
         process.env.REFRESH_TOKEN_SECRET,
         {
